@@ -1,0 +1,10 @@
+env = "prod"
+name = "insurance"
+region = "us-east1"
+#billing_account = "01F975-11BF2C-6BC84D"
+#org = "BLAH"
+zones = ["us-east1-b", "us-east1-c"] 
+internal_subnet_ip_range = "192.168.1.0/24"
+management_subnet_ip_range = "192.168.100.0/24"
+bastion_instance_type = "f1-micro" 
+docker_registry_instance_type = "n1-standard-4"

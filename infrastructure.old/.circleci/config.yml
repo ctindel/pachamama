@@ -1,0 +1,47 @@
+version: 2
+general:
+  branches:
+    only:
+      - master
+      - develop
+jobs:
+  build:
+    docker:
+      - image: ubuntu:18.04
+    steps:
+      - checkout
+      - run:
+          name: Install Terraform
+          command: |
+            apt-get update
+            apt-get install -y wget unzip
+            wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
+            unzip terraform_*.zip
+            mv terraform /usr/bin/
+            rm terraform_*.zip
+            terraform --version
+      - run:
+          name: Terraform Apply
+          command: |
+            export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json
+
+            if [ "$CIRCLE_BRANCH" == "develop" ]; then
+              ENVIRONMENT=stage
+              PROJECT=$PROJECT_STAGE
+              echo $GCLOUD_SERVICE_KEY_STAGE > $GOOGLE_APPLICATION_CREDENTIALS
+            else
+              ENVIRONMENT=prod
+              PROJECT=$PROJECT_PROD
+              echo $GCLOUD_SERVICE_KEY_PROD > $GOOGLE_APPLICATION_CREDENTIALS
+            fi
+
+            cd ~/project/$ENVIRONMENT
+            terraform init
+            terraform apply \
+              -auto-approve \
+              -var org_id=$ORGANIZATION_ID \
+              -var billing_account=$BILLING_ID \
+              -var project=$PROJECT \
+              -var environment=$ENVIRONMENT
+
+            rm $GOOGLE_APPLICATION_CREDENTIALS
