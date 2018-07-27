@@ -17,3 +17,6 @@ apt-get install -y apt-fast
 
 # lsb-release provides release ver in /etc/os-release as VERSION_ID
 apt-get install -y lsb-release
+
+# k8s has some packages shipped only in snap
+apt-get install -y snapd

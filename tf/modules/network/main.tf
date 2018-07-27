@@ -1,12 +1,13 @@
 resource "google_compute_network" "network" {
   name    = "${var.name}-network"
   project = "${var.project}"
+  auto_create_subnetworks = false
 }
 
 resource "google_compute_firewall" "allow-internal" {
   name    = "${var.name}-allow-internal"
   project = "${var.project}"
-  network = "${var.name}-network"
+  network = "${google_compute_network.network.name}"
 
   allow {
     protocol = "icmp"
@@ -31,7 +32,7 @@ resource "google_compute_firewall" "allow-internal" {
 resource "google_compute_firewall" "allow-ssh-from-everywhere-to-bastion" {
   name    = "${var.name}-allow-ssh-from-everywhere-to-bastion"
   project = "${var.project}"
-  network = "${var.name}-network"
+  network = "${google_compute_network.network.name}"
 
   allow {
     protocol = "tcp"
@@ -46,7 +47,7 @@ resource "google_compute_firewall" "allow-ssh-from-everywhere-to-bastion" {
 resource "google_compute_firewall" "allow-ssh-from-bastion-to-internal" {
   name               = "${var.name}-allow-ssh-from-bastion-to-internal"
   project            = "${var.project}"
-  network            = "${var.name}-network"
+  network            = "${google_compute_network.network.name}"
   direction          = "EGRESS"
 
   allow {
@@ -60,7 +61,7 @@ resource "google_compute_firewall" "allow-ssh-from-bastion-to-internal" {
 resource "google_compute_firewall" "allow-ssh-to-internal-from-bastion" {
   name          = "${var.name}-allow-ssh-to-private-network-from-bastion"
   project       = "${var.project}"
-  network       = "${var.name}-network"
+  network       = "${google_compute_network.network.name}"
   direction     = "INGRESS"
 
   allow {
@@ -75,18 +76,24 @@ module "management_subnet" {
   source   = "./subnet"
   project  = "${var.project}"
   region   = "${var.region}"
-  name     = "${var.management_subnet_name}"
+  name     = "${var.name}-management"
+  subnet_name = "${var.management_subnet_name}"
   network  = "${google_compute_network.network.self_link}"
   ip_range = "${var.management_subnet_ip_range}"
+  cluster_service_cidr_range = "${var.external_k8s_cluster_service_cidr_range}"
+  pod_cidr_range = "${var.external_k8s_pod_cidr_range}"
 }
 
 module "internal_subnet" {
   source   = "./subnet"
   project  = "${var.project}"
   region   = "${var.region}"
-  name     = "${var.internal_subnet_name}"
+  name     = "${var.name}-internal"
+  subnet_name = "${var.internal_subnet_name}"
   network  = "${google_compute_network.network.self_link}"
   ip_range = "${var.internal_subnet_ip_range}"
+  cluster_service_cidr_range = "${var.internal_k8s_cluster_service_cidr_range}"
+  pod_cidr_range = "${var.internal_k8s_pod_cidr_range}"
 }
 
 module "bastion" {

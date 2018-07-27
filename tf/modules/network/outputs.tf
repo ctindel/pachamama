@@ -2,6 +2,10 @@ output "name" {
   value = "${google_compute_network.network.name}"
 }
 
+output "network_self_link" {
+  value = "${google_compute_network.network.self_link}"
+}
+
 output "management_subnet_self_link" {
   value = "${module.management_subnet.self_link}"
 }
