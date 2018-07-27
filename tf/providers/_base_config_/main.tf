@@ -64,6 +64,19 @@ module "mongodb" {
   #ssh_key                    = "${var.ssh_key}"
 }
 
+module "elasticsearch" {
+  source                     = "../../modules/elasticsearch"
+  env                        = "${var.env}"
+  name                       = "${var.name}-${var.env}"
+  project                    = "${module.project.id}"
+  network                    = "${module.network.network_self_link}"
+  subnet                     = "${module.network.internal_subnet_self_link}"
+  zones                      = "${var.zones}"
+  instance_type              = "${var.elasticsearch_instance_type}"
+  #user                       = "${var.user}"
+  #ssh_key                    = "${var.ssh_key}"
+}
+
 #module "external_k8s" {
 #  source                     = "../../modules/k8s"
 #  env                        = "${var.env}"

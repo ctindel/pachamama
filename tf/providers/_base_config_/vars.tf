@@ -47,6 +47,10 @@ variable "mongodb_instance_type" {
     description = "Instance type to use for the mongodb hosts"
 }
 
+variable "elasticsearch_instance_type" { 
+    description = "Instance type to use for the elasticsearch hosts"
+}
+
 variable "external_k8s_instance_type" { 
     description = "Instance type to use for the external k8s nodes"
 }
