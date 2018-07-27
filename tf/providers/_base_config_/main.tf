@@ -46,24 +46,37 @@ module "gitlab" {
   project                    = "${module.project.id}"
   subnet                     = "${module.network.internal_subnet_self_link}"
   zones                      = "${var.zones}"
-  instance_type              = "${var.docker_registry_instance_type}"
+  instance_type              = "${var.gitlab_instance_type}"
   #user                       = "${var.user}"
   #ssh_key                    = "${var.ssh_key}"
 }
 
-module "external_k8s" {
-  source                     = "../../modules/k8s"
+module "mongodb" {
+  source                     = "../../modules/mongodb"
   env                        = "${var.env}"
-  name                       = "${var.name}-${var.env}-management"
-  project                    = "${module.project.name}"
+  name                       = "${var.name}-${var.env}"
+  project                    = "${module.project.id}"
   network                    = "${module.network.network_self_link}"
-  subnet                     = "${module.network.management_subnet_self_link}"
+  subnet                     = "${module.network.internal_subnet_self_link}"
   zones                      = "${var.zones}"
-  instance_type              = "${var.external_k8s_instance_type}"
-  instance_count             = "${var.external_k8s_instance_count}"
-  private_cluster            = false
-  master_ipv4_cidr_block     = "${var.external_k8s_master_k8s_ip_range}"
+  instance_type              = "${var.mongodb_instance_type}"
+  #user                       = "${var.user}"
+  #ssh_key                    = "${var.ssh_key}"
 }
+
+#module "external_k8s" {
+#  source                     = "../../modules/k8s"
+#  env                        = "${var.env}"
+#  name                       = "${var.name}-${var.env}-management"
+#  project                    = "${module.project.name}"
+#  network                    = "${module.network.network_self_link}"
+#  subnet                     = "${module.network.management_subnet_self_link}"
+#  zones                      = "${var.zones}"
+#  instance_type              = "${var.external_k8s_instance_type}"
+#  instance_count             = "${var.external_k8s_instance_count}"
+#  private_cluster            = false
+#  master_ipv4_cidr_block     = "${var.external_k8s_master_k8s_ip_range}"
+#}
 
 # Can't get this to work.  Google just gives an unspecified error with 
 #  literally zero error messages or debugging help

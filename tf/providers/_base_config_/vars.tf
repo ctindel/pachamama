@@ -39,6 +39,14 @@ variable "docker_registry_instance_type" {
     description = "Instance type to use for the docker registry host"
 }
 
+variable "gitlab_instance_type" { 
+    description = "Instance type to use for the gitlab host"
+}
+
+variable "mongodb_instance_type" { 
+    description = "Instance type to use for the mongodb hosts"
+}
+
 variable "external_k8s_instance_type" { 
     description = "Instance type to use for the external k8s nodes"
 }
