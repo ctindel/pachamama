@@ -20,3 +20,5 @@ done
 # Add the elastic key and repos in case we want to install some elastic software
 curl -s https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-6.x.list
+
+docker-compose -f /root/docker-compose.yml up -d
