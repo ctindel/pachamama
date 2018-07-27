@@ -26,3 +26,19 @@ sed -i.bak 's/bindIp.*/bindIpAll: true/g' /etc/mongod.conf
 sed -i.bak 's/#replication.*/replication:\n  replSetName: pachamama/g' /etc/mongod.conf
 systemctl enable mongod
 systemctl start mongod
+
+# We need to wait until mongod is up and running on the other nodes
+if [ "$HOSTNAME" = mongodb1 ]; then
+    echo "We are on mongodb1, going to do the rs.initiate()"
+    echo "Waiting for mongodb port 27017 to be ready on hosts mongodb2 and mongodb3"
+    while ! ncat mongodb2 27017 --send-only </dev/null; do
+        sleep 5
+    done
+    while ! ncat mongodb3 27017 --send-only </dev/null; do
+        sleep 5
+    done
+    echo "All 3 hosts are online, initiating replica set"
+    echo -e 'rs.initiate({_id: "pachamama",members:[{_id:0,host:"mongodb1"}, {_id:1,host:"mongodb2"},{_id:2,host:"mongodb3"}]})' | mongo
+else
+    echo "We are on $HOSTNAME, the other host mongodb1 will initiate the replica set"
+fi
