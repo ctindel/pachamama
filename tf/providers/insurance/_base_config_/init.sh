@@ -18,9 +18,8 @@
 # PARENT_DIR will be "network"
 # ENV_DIR will be "dev"
 
-source ../../../env.sh
+source "../../../../env.sh"
 
-readonly GCS_BUCKET="sa.elastic.co-us-east-2"
 readonly FULL_PARENT_DIR="$(dirname "$PWD")"
 readonly PARENT_DIR=${FULL_PARENT_DIR##*/}
 readonly ENV_DIR=${PWD##*/}
@@ -63,12 +62,12 @@ fi
 # clear out any existing local state
 [[ -d .terraform ]] && rm -rf .terraform
 
-echo "Backend key is gs://$PM_PROJECT-$ENV_DIR/terraform.tfstate"
+echo "Backend key is gs://$GCS_BUCKET/tf/$PARENT_DIR/$ENV_DIR/terraform.tfstate"
 
 terraform init \
-    -backend-config="bucket=$S3_SA_BUCKET" \
+    -backend-config="bucket=$GCS_BUCKET"\
     -backend-config="project=$GCLOUD_PROJECT" \
-    -backend-config="path=/terraform.tfstate"
+    -backend-config="prefix=/tf/$PARENT_DIR/$ENV_DIR/terraform.tfstate"
 
 terraform get -update
 

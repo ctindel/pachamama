@@ -1,0 +1,18 @@
+#cloud-config
+debug: true
+disable_root: false
+#manage_etc_hosts: true
+apt_update: true
+package_upgrade: true
+packages:
+growpart:
+    mode: auto
+    devices: ['/']
+    ignore_growroot_disabled: false
+bootcmd:
+write_files:
+runcmd:
+    # just let the ASG reboot this box every Saturday
+    #- echo "/sbin/halt" | /usr/bin/at midnight $$(date -d 'next Saturday' '+%Y-%m-%d')
+    - mkdir -p /srv/gitlab
+    - docker run -d -h gitlab.example.com -p 443:443 -p 80:80 -p 10022:22 -e "GITLAB_SHELL_SSH_PORT=10022" -n gitlab --restart always -v /srv/gitlab/config:/etc/gitlab -v /srv/gitlab/logs:/var/log/gitlab --volume /srv/gitlab/data:/var/opt/gitlab gitlab/gitlab-ce:latest

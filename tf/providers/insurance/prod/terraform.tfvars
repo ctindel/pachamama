@@ -1,6 +1,8 @@
 env = "prod"
 name = "insurance"
 region = "us-east1"
+owner_group_email = "gcp-admins@tindelmg.com"
+service_account_email = "198376435150-compute@developer.gserviceaccount.com"
 #billing_account = "01F975-11BF2C-6BC84D"
 #org = "BLAH"
 zones = ["us-east1-b", "us-east1-c"] 

@@ -1,6 +1,4 @@
 #!/bin/bash
 
-export PM_ENV=prod
+export GCS_BUCKET="ctindel-211916"
 export GCLOUD_PROJECT=ctindel-211916
-export PM_PROJECT=insurance
-export PM_ORG_ID=924627718475

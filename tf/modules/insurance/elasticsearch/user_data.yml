@@ -1,0 +1,26 @@
+#cloud-config
+debug: true
+disable_root: false
+#manage_etc_hosts: true
+apt_update: true
+package_upgrade: true
+growpart:
+    mode: auto
+    devices: ['/']
+    ignore_growroot_disabled: false
+bootcmd:
+write_files:
+    - path: /root/install_es.sh
+      encoding: base64
+      content: ${base64encode(install_es_sh)}
+      owner: "root:root"
+      permissions: "0755"
+    - path: /root/docker-compose.yml
+      encoding: base64
+      content: ${base64encode(docker_compose_yml)}
+      owner: "root:root"
+      permissions: "0755"
+runcmd:
+    # just let the ASG reboot this box every Saturday
+    #- echo "/sbin/halt" | /usr/bin/at midnight $$(date -d 'next Saturday' '+%Y-%m-%d')
+    - /root/install_es.sh

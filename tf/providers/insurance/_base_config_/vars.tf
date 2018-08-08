@@ -10,6 +10,14 @@ variable "region" {
   description = "The google cloud region in which to run"
 }
 
+variable "owner_group_email" {
+  description = "The email of the GCP admin google group"
+}
+
+variable "service_account_email" {
+  description = "The service account from the parent admin project"
+}
+
 #variable "billing_account" {
 #  description = "The google cloud billing account"
 #}
