@@ -18,13 +18,13 @@ variable "service_account_email" {
   description = "The service account from the parent admin project"
 }
 
-#variable "billing_account" {
-#  description = "The google cloud billing account"
-#}
-#
-#variable "org_id" {
-#  description = "The google cloud organization ID"
-#}
+variable "billing_account" {
+  description = "The google cloud billing account"
+}
+
+variable "org_id" {
+  description = "The google cloud organization ID"
+}
 
 variable "zones" { 
     type = "list" 

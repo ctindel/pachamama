@@ -9,8 +9,8 @@ module "project" {
   region            = "${var.region}"
   owner_group_email = "${var.owner_group_email}"
   service_account_email = "${var.service_account_email}"
-  billing_account   = "01F975-11BF2C-6BC84D"
-  org_id            = "924627718475"
+  billing_account   = "${var.billing_account}"
+  org_id            = "${var.org_id}"
 }
 
 module "network" {

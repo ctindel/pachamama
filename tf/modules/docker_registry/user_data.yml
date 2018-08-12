@@ -14,4 +14,4 @@ write_files:
 runcmd:
     # just let the ASG reboot this box every Saturday
     #- echo "/sbin/halt" | /usr/bin/at midnight $$(date -d 'next Saturday' '+%Y-%m-%d')
-    - docker run -d -p 5000:5000 --restart=always --privileged --name registry -e "REGISTRY_STORAGE=gcs" -e "REGISTRY_STORAGE_GCS_BUCKET=insurance-prod" -e "REGISTRY_STORAGE_GCS_ROOTDIRECTORY=/registry" registry:2
+    - docker run -d -p 5000:5000 --restart=always --privileged --name registry -e "REGISTRY_STORAGE=gcs" -e "REGISTRY_STORAGE_GCS_BUCKET=insurance-${env}" -e "REGISTRY_STORAGE_GCS_ROOTDIRECTORY=/registry" registry:2
